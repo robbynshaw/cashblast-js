@@ -1,5 +1,6 @@
 import { Recurrance } from "../models/Recurrance"
 import { ValidationError } from "../models/ValidationError"
+import { RRule } from "rrule"
 
 export const validateRecurrance = (
   recurrance: string
@@ -7,6 +8,7 @@ export const validateRecurrance = (
   return null // TODO
 }
 
-export const parseRecurrance = (recurrance: string): Recurrance => {
-  return {} // TODO
+export const parseRecurrance = (recurrance: string): RRule => {
+  const recur: RRule = RRule.fromText(recurrance)
+  return recur
 }

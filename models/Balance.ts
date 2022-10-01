@@ -1,4 +1,4 @@
 export interface Balance {
-  date: number
+  date: Date
   amount: number
 }

@@ -4,6 +4,6 @@ export interface Transaction {
   name: string
   value: number
   account: Account
-  date: number
+  date: Date
   isVerified: boolean
 }

@@ -1,10 +1,9 @@
 import moment from "moment"
-import { NullAccount } from "../models/Account"
+import { RRule } from "rrule"
+import { Account, NullAccount } from "../models/Account"
 import { Bill } from "../models/Bill"
-import { Recurrance } from "../models/Recurrance"
 import { Transaction } from "../models/Transaction"
 import { ValidationError } from "../models/ValidationError"
-import { getNextDate } from "./dateUtil"
 import { parseRecurrance, validateRecurrance } from "./recurranceUtil"
 
 const requiredError = (name: string): ValidationError => ({
@@ -53,13 +52,19 @@ export const validateBill = (bill: Bill): ValidationError[] => {
 }
 
 export const createAllTransactions = (
+  account: Account,
   bills: Bill[],
   start: number,
   end: number
 ): Transaction[] => {
   const results: Transaction[] = []
   bills.map((bill) => {
-    const transactions: Transaction[] = createTransactions(start, end, bill)
+    const transactions: Transaction[] = createTransactions(
+      account,
+      start,
+      end,
+      bill
+    )
     transactions.map((t) => {
       results.push(t)
     })
@@ -68,31 +73,41 @@ export const createAllTransactions = (
 }
 
 export const createTransactions = (
+  account: Account,
   start: number,
   end: number,
   bill: Bill
 ): Transaction[] => {
   const results: Transaction[] = []
-  let firstBill: number = bill.first
+  let firstBill: Date = bill.first
+  let isDebit: boolean = true
+  if (account.id === bill.creditAccountId) {
+    isDebit = false
+  }
+
   const baseTrans: Transaction = {
     name: bill.name,
-    value: bill.value,
-    account: bill.creditAccount || bill.debitAccount || NullAccount,
+    value: isDebit ? -bill.value : bill.value,
+    account: account,
     date: firstBill,
     isVerified: false,
   }
   if (bill.recurrance) {
-    const recurrance: Recurrance = parseRecurrance(bill.recurrance)
+    const recurrance: RRule = parseRecurrance(bill.recurrance)
+    recurrance.options.dtstart = firstBill
+    const dates: Date[] = recurrance.between(
+      new Date(start),
+      new Date(end),
+      true
+    )
 
-    while (firstBill < start) {
-      firstBill = getNextDate(firstBill, recurrance)
-    }
-
-    while (firstBill <= end) {
-      results.push({ ...baseTrans, date: firstBill })
-      firstBill = getNextDate(firstBill, recurrance)
-    }
-  } else {
+    dates.map((dt) => {
+      results.push({ ...baseTrans, date: dt })
+    })
+  } else if (
+    baseTrans.date >= new Date(start) &&
+    baseTrans.date <= new Date(end)
+  ) {
     results.push(baseTrans)
   }
 

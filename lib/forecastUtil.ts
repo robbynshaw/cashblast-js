@@ -8,11 +8,11 @@ export const dateSortBalancedAsc = (
   a: BalancedTransaction,
   b: BalancedTransaction
 ) => {
-  return a.transaction.date - b.transaction.date
+  return dateSortAsc(a.transaction, b.transaction)
 }
 
 export const dateSortAsc = (a: Transaction, b: Transaction) => {
-  return a.date - b.date
+  return a.date.getTime() - b.date.getTime()
 }
 
 const balanceTransactions = (
@@ -55,30 +55,23 @@ const getYearlyBalances = (transactions: BalancedTransaction[]): Balance[] => {
   const sortedTransactions: BalancedTransaction[] =
     transactions.sort(dateSortBalancedAsc)
   let lastTrans: BalancedTransaction = sortedTransactions[0]
-  let lastYear: number = getYear(lastTrans.transaction.date)
+  let lastYear: number = lastTrans.transaction.date.getFullYear()
 
   for (let i = 0; i < transactions.length; i++) {
     const t: BalancedTransaction = transactions[i]
 
-    if (lastYear < getYear(t.transaction.date)) {
+    if (lastYear < t.transaction.date.getFullYear()) {
       results.push({
-        date: new Date(lastYear, 12, 31, 23, 59, 59).getTime(),
+        date: new Date(lastYear, 12, 31, 23, 59, 59),
         amount: lastTrans.balance,
       })
-      lastYear = getYear(t.transaction.date)
+      lastYear = t.transaction.date.getFullYear()
       lastTrans = t
     }
 
     if (i == transactions.length - 1) {
       results.push({
-        date: new Date(
-          getYear(t.transaction.date),
-          12,
-          31,
-          23,
-          59,
-          59
-        ).getTime(),
+        date: new Date(t.transaction.date.getFullYear(), 12, 31, 23, 59, 59),
         amount: t.balance,
       })
     }

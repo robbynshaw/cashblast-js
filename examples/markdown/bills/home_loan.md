@@ -6,4 +6,5 @@ creditAccountId: "../accounts/home_asset.md"
 creditIncludesInterest: false
 value: 750.00
 first: 2022-05-01T00:00:00
+recurrance: every 30 days
 ---

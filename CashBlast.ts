@@ -1,8 +1,4 @@
-import {
-  createAllTransactions,
-  createTransactions,
-  validateBill,
-} from "./lib/billUtil"
+import { createAllTransactions, validateBill } from "./lib/billUtil"
 import { combineForecasts, createForecast } from "./lib/forecastUtil"
 import { filterInvalid } from "./lib/validationUtil"
 import { Account } from "./models/Account"
@@ -37,6 +33,7 @@ export class CashBlast {
         bills = filterInvalid<Bill>(bills, validateBill)
 
         const transactions: Transaction[] = createAllTransactions(
+          account,
           bills,
           start,
           end
