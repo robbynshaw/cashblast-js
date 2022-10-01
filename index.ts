@@ -1,25 +1,27 @@
-import { Bill } from "./models/Bill"
-import { getValidBills } from "./cli/bills"
-import { Account } from "./models/Account"
-import { getValidAccounts } from "./cli/accounts"
-import { AccountRepo } from "./repos/AccountRepo"
-import { MarkdownAccountRepo } from "./repos/markdown/MarkdownAccountRepo"
-import { BillRepo } from "./repos/BillRepo"
-import { MarkdownBillRepo } from "./repos/markdown/MarkdownBillRepo"
-import { CashBlast } from "./CashBlast"
-import { ForecastResult } from "./models/ForecastResult"
-import moment from "moment"
-import { TransactionRepo } from "./repos/TransactionRepo"
-import { MarkdownTransactionRepo } from "./repos/markdown/MarkdownTransactionRepo"
-import { printForecasts } from "./cli/forecast"
 import { argv } from "process"
+import yargs from "yargs/yargs"
+import { hideBin } from "yargs/helpers"
+import path from "path"
+import { parseDate } from "chrono-node"
+import { printForecasts } from "./cli/forecast"
 
 const run = async () => {
   console.log("💰💥💥 CashBlast 💰💥💥")
+  const args = yargs(hideBin(argv))
+    .options({
+      rootDir: { type: "string", default: "./examples" },
+      start: { type: "string", default: "31 Dec 2021" },
+      end: { type: "string", default: "in 3 months" },
+    })
+    .parseSync()
 
-  const rootDir: string = "./examples"
-  const start: number = new Date("2022-01-01T00:00:00").getTime()
-  const end: number = new Date("2023-01-01T00:00:00").getTime()
+  const rootDir: string = path.resolve(args.rootDir)
+  console.log("Root Dir:", rootDir)
+
+  const startDate: Date = parseDate(args.start)
+  console.log("Start Date:", startDate)
+  const endDate: Date = parseDate(args.end)
+  console.log("End Date", endDate)
 
   // const accounts: Account[] = await getValidAccounts(rootDir)
   // accounts.map((a) => console.log(`Valid Account: ${a.id}`))
@@ -27,7 +29,7 @@ const run = async () => {
   // const bills: Bill[] = await getValidBills(rootDir, accounts)
   // bills.map((b) => console.log(`Valid Bill: ${b.id}`))
 
-  await printForecasts(rootDir, start, end)
+  await printForecasts(rootDir, startDate.getTime(), endDate.getTime())
 
   console.log("Dunzo 🏁")
 }

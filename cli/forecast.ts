@@ -24,18 +24,30 @@ export const printForecasts = async (
     const { account, forecast } = fcresult
     const { name } = account
     const { lowestBalance, transactions } = forecast
-    console.log(`FORECAST: ${name}`)
+    console.log(`\nFORECAST: ${name}`)
     console.log(
       `\tLowest Balance: $${lowestBalance.amount} @ ${moment(
         lowestBalance.date
       ).toString()}`
     )
     console.log(`\tTransactions:`)
+    console.log(
+      `\t\t${"DATE".padEnd(35)} | ${"NAME".padEnd(20)} | ${"VALUE".padEnd(
+        11
+      )} | ${"BALANCE"}`
+    )
+    console.log(
+      "\t\t======================================================================================"
+    )
     transactions.map((t) => {
       const { balance, transaction } = t
       const { date, name, value } = transaction
       console.log(
-        `\t\t${moment(date).toString()} - ${name} - ${value} - ${balance}`
+        `\t\t${moment(date).toString().padEnd(35)} | ${name.padEnd(
+          20
+        )} | $${value.toFixed(2).padStart(10)} | $${balance
+          .toFixed(2)
+          .padStart(10)}`
       )
     })
   })
