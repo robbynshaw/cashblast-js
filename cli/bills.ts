@@ -12,7 +12,6 @@ export const getValidBills = async (
   const billRepo: BillRepo = new MarkdownBillRepo(rootDir)
   let bills: Bill[] = await billRepo.getAll()
   bills = MarkdownBillRepo.resolveAccounts(bills, accounts)
-  console.log("Bills", bills)
 
   const validBills: Bill[] = bills
     .map((bill) => {

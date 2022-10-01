@@ -38,9 +38,6 @@ export class MarkdownBillRepo implements BillRepo {
     const accountsById: Map<string, Account> = new Map<string, Account>()
     accounts.map((account) => accountsById.set(account.id, account))
 
-    console.log("Accounts:", accountsById)
-    console.log("Bills:", bills)
-
     return bills.map((bill) => ({
       ...bill,
       creditAccount: bill.creditAccountId
