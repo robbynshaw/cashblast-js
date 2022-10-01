@@ -1,4 +1,3 @@
-import { Recurrance } from "../models/Recurrance"
 import { ValidationError } from "../models/ValidationError"
 import { RRule } from "rrule"
 

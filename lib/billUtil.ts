@@ -5,6 +5,7 @@ import { Bill } from "../models/Bill"
 import { Transaction } from "../models/Transaction"
 import { ValidationError } from "../models/ValidationError"
 import { parseRecurrance, validateRecurrance } from "./recurranceUtil"
+import { v4 } from "uuid"
 
 const requiredError = (name: string): ValidationError => ({
   field: name,
@@ -86,8 +87,10 @@ export const createTransactions = (
   }
 
   const baseTrans: Transaction = {
+    id: v4(),
     name: bill.name,
     value: isDebit ? -bill.value : bill.value,
+    accountId: account.id,
     account: account,
     date: firstBill,
     isVerified: false,

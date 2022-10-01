@@ -10,14 +10,21 @@ import { Transaction } from "./models/Transaction"
 import { AccountRepo } from "./repos/AccountRepo"
 import { BillRepo } from "./repos/BillRepo"
 import { MarkdownBillRepo } from "./repos/markdown/MarkdownBillRepo"
+import { TransactionRepo } from "./repos/TransactionRepo"
 
 export class CashBlast {
   private readonly accountRepo: AccountRepo
   private readonly billRepo: BillRepo
+  private readonly transRepo: TransactionRepo
 
-  constructor(accountRepo: AccountRepo, billRepo: BillRepo) {
+  constructor(
+    accountRepo: AccountRepo,
+    billRepo: BillRepo,
+    transRepo: TransactionRepo
+  ) {
     this.accountRepo = accountRepo
     this.billRepo = billRepo
+    this.transRepo = transRepo
   }
 
   public async forecastAll(
@@ -32,13 +39,19 @@ export class CashBlast {
         bills = MarkdownBillRepo.resolveAccounts(bills, [account])
         bills = filterInvalid<Bill>(bills, validateBill)
 
+        const manualTrans: Transaction[] = await this.transRepo.getForAccount(
+          account
+        )
         const transactions: Transaction[] = createAllTransactions(
           account,
           bills,
           start,
           end
         )
-        const fc: Forecast = createForecast(account.name, transactions)
+        const fc: Forecast = createForecast(account.name, [
+          ...manualTrans,
+          ...transactions,
+        ])
 
         return {
           account,
