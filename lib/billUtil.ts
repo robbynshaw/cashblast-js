@@ -1,4 +1,5 @@
 import moment from "moment"
+import { NullAccount } from "../models/Account"
 import { Bill } from "../models/Bill"
 import { Recurrance } from "../models/Recurrance"
 import { Transaction } from "../models/Transaction"
@@ -34,10 +35,10 @@ export const validateBill = (bill: Bill): ValidationError[] => {
     })
   }
 
-  if (!creditAccount || !debitAccount) {
+  if (!creditAccount && !debitAccount) {
     results.push({
-      field: "creditAccount|debitAccount",
-      error: "each bill must have a creditAccount or a debitAccount",
+      field: "creditAccountId|debitAccountId",
+      error: "each bill must have a creditAccountId or a debitAccountId",
     })
   }
 
@@ -76,7 +77,7 @@ export const createTransactions = (
   const baseTrans: Transaction = {
     name: bill.name,
     value: bill.value,
-    account: bill.creditAccount || bill.debitAccount, // TODO?
+    account: bill.creditAccount || bill.debitAccount || NullAccount,
     date: firstBill,
     isVerified: false,
   }

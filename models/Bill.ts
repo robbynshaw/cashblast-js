@@ -6,6 +6,17 @@ export interface Bill extends HasID {
   value: number
   recurrance?: string
   first: number
-  creditAccount: Account
+
+  creditAccountId?: string
+  creditAccount?: Account
+
+  debitAccountId?: string
   debitAccount?: Account
+}
+
+export const NullBill: Bill = {
+  id: "",
+  name: "",
+  value: 0,
+  first: 0,
 }

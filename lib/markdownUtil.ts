@@ -12,10 +12,20 @@ export async function parseYamlFilesByType<T extends HasID>(
     files.map(async (file) => {
       const yamlLines: string = await readYamlFrontMatter(file)
       const result = yaml.load(yamlLines) as T
-      result.id = path.relative(rootDir, file)
+      result.id = file
       return result
     })
   )
 
   return models
+}
+
+export function convertToAbsolutePath(
+  fileId: string,
+  refId: string | undefined
+): string | undefined {
+  if (!refId) {
+    return undefined
+  }
+  return path.resolve(path.dirname(fileId), refId)
 }

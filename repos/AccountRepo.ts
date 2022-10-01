@@ -1,5 +1,5 @@
 import { Account } from "../models/Account"
 
 export interface AccountRepo {
-  getAll(): Account[]
+  getAll(): Promise<Account[]>
 }
