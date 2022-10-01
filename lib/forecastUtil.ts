@@ -19,7 +19,7 @@ const balanceTransactions = (
   transactions: Transaction[]
 ): BalancedTransaction[] => {
   if (!transactions || !transactions.length) {
-    return null
+    throw new Error("transactions must not be empty")
   }
 
   let balance: number = 0
@@ -35,7 +35,7 @@ const balanceTransactions = (
 
 const getLowestBalance = (transactions: BalancedTransaction[]): Balance => {
   if (!transactions || !transactions.length) {
-    return null
+    throw new Error("transactions must not be empty")
   }
 
   let result = transactions[0]

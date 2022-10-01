@@ -22,8 +22,22 @@ export class MarkdownBillRepo implements BillRepo {
   }
 
   public async getForAccount(account: Account): Promise<Bill[]> {
-    let bills: Bill[] = await parseYamlFilesByType(this.rootDir, BillTypeName)
-    return bills.map(this.standardizeIds)
+    const bills: Bill[] = await this.getAll()
+    return bills.filter((bill) => {
+      if (
+        bill.creditAccountId &&
+        bill.creditAccountId.toLowerCase() === account.id.toLowerCase()
+      ) {
+        return true
+      }
+      if (
+        bill.debitAccountId &&
+        bill.debitAccountId.toLowerCase() === account.id.toLowerCase()
+      ) {
+        return true
+      }
+      return false
+    })
   }
 
   private standardizeIds(bill: Bill): Bill {
