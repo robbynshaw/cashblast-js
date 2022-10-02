@@ -12,6 +12,7 @@
   "dependencies": {
     "chrono-node": "^2.4.1",
     "js-yaml": "^4.1.0",
+    "markdown-table": "^3.0.2",
     "moment": "^2.29.4",
     "rrule": "^2.7.1",
     "uuid": "^9.0.0",
@@ -20,12 +21,16 @@
   "name": "cashblast-js",
   "version": "0.1.0",
   "description": "Predict future transactions from simple bills",
-  "main": "index.js",
+  "exports": "./index.js",
   "repository": "https://github.com/robbynshaw/cashblast-js",
   "author": "Robert N. Shaw",
   "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=14.16"
+  },
   "scripts": {
-    "start": "ts-node ./index.ts",
+    "start": "ts-node --esm ./index.ts",
     "format": "prettier --write **/*.ts"
   },
   "prettier": {

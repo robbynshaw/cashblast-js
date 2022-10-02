@@ -1,5 +1,5 @@
-import { Account } from "../models/Account"
-import { Bill } from "../models/Bill"
+import { Account } from "../models/Account.js"
+import { Bill } from "../models/Bill.js"
 
 export interface BillRepo {
   getAll(): Promise<Bill[]>

@@ -1,11 +1,11 @@
-import { Account } from "../../models/Account"
-import { Bill } from "../../models/Bill"
-import { BillRepo } from "../BillRepo"
+import { Account } from "../../models/Account.js"
+import { Bill } from "../../models/Bill.js"
+import { BillRepo } from "../BillRepo.js"
 
 import {
   convertToAbsolutePath,
   parseYamlFilesByType,
-} from "../../lib/markdownUtil"
+} from "../../lib/markdownUtil.js"
 
 export const BillTypeName = "CashBlast.Bill"
 

@@ -1,7 +1,10 @@
+import { markdownTable } from "markdown-table"
 import yaml from "js-yaml"
 import path from "path"
-import { HasID } from "../models/HasID"
-import { findFilesByType, readYamlFrontMatter } from "./fileUtil"
+import { HasID } from "../models/HasID.js"
+import { findFilesByType, readYamlFrontMatter } from "./fileUtil.js"
+import { BalancedTransaction } from "../models/BalancedTransaction.js"
+import moment from "moment"
 
 export async function parseYamlFilesByType<T extends HasID>(
   rootDir: string,
@@ -28,4 +31,20 @@ export function convertToAbsolutePath(
     return undefined
   }
   return path.resolve(path.dirname(fileId), refId)
+}
+
+export const createMarkdownTable = (transactions: BalancedTransaction[]) => {
+  const table: string = markdownTable([
+    ["DATE", "NAME", "VALUE", "BALANCE"],
+    ...transactions.map((t) => {
+      const { balance, transaction } = t
+      const { date, name, value } = transaction
+      return [
+        moment(date).toString(),
+        name,
+        value.toFixed(2),
+        balance.toFixed(2),
+      ]
+    }),
+  ])
 }

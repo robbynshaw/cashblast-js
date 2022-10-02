@@ -1,6 +1,6 @@
-import { parseYamlFilesByType } from "../../lib/markdownUtil"
-import { Account } from "../../models/Account"
-import { AccountRepo } from "../AccountRepo"
+import { parseYamlFilesByType } from "../../lib/markdownUtil.js"
+import { Account } from "../../models/Account.js"
+import { AccountRepo } from "../AccountRepo.js"
 
 export const AccountTypeName = "CashBlast.Account"
 

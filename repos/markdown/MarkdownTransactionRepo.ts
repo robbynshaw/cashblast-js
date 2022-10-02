@@ -1,10 +1,10 @@
 import {
   convertToAbsolutePath,
   parseYamlFilesByType,
-} from "../../lib/markdownUtil"
-import { Account } from "../../models/Account"
-import { Transaction } from "../../models/Transaction"
-import { TransactionRepo } from "../TransactionRepo"
+} from "../../lib/markdownUtil.js"
+import { Account } from "../../models/Account.js"
+import { Transaction } from "../../models/Transaction.js"
+import { TransactionRepo } from "../TransactionRepo.js"
 
 export const TransactionTypeName = "CashBlast.Transaction"
 

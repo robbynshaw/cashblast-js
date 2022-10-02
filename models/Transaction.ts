@@ -1,5 +1,5 @@
-import { Account } from "./Account"
-import { HasID } from "./HasID"
+import { Account } from "./Account.js"
+import { HasID } from "./HasID.js"
 
 export interface Transaction extends HasID {
   name: string

@@ -1,4 +1,4 @@
-import { ValidationError } from "../models/ValidationError"
+import { ValidationError } from "../models/ValidationError.js"
 
 export function filterInvalid<T>(
   models: T[],

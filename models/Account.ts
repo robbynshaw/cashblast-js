@@ -1,5 +1,5 @@
-import { Bill } from "./Bill"
-import { HasID } from "./HasID"
+import { Bill } from "./Bill.js"
+import { HasID } from "./HasID.js"
 
 export interface Account extends HasID {
   name: string

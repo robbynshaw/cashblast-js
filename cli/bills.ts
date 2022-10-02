@@ -1,10 +1,10 @@
-import { validateBill } from "../lib/billUtil"
-import { filterInvalid } from "../lib/validationUtil"
-import { Account } from "../models/Account"
-import { Bill } from "../models/Bill"
-import { ValidationError } from "../models/ValidationError"
-import { BillRepo } from "../repos/BillRepo"
-import { MarkdownBillRepo } from "../repos/markdown/MarkdownBillRepo"
+import { validateBill } from "../lib/billUtil.js"
+import { filterInvalid } from "../lib/validationUtil.js"
+import { Account } from "../models/Account.js"
+import { Bill } from "../models/Bill.js"
+import { ValidationError } from "../models/ValidationError.js"
+import { BillRepo } from "../repos/BillRepo.js"
+import { MarkdownBillRepo } from "../repos/markdown/MarkdownBillRepo.js"
 
 export const getValidBills = async (
   rootDir: string,

@@ -3,7 +3,7 @@ import yargs from "yargs/yargs"
 import { hideBin } from "yargs/helpers"
 import path from "path"
 import { parseDate } from "chrono-node"
-import { printForecasts } from "./cli/forecast"
+import { printForecasts } from "./cli/forecast.js"
 
 const run = async () => {
   console.log("💰💥💥 CashBlast 💰💥💥")

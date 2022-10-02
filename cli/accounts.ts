@@ -1,9 +1,9 @@
-import { validateAccount } from "../lib/accountUtil"
-import { filterInvalid } from "../lib/validationUtil"
-import { Account } from "../models/Account"
-import { ValidationError } from "../models/ValidationError"
-import { AccountRepo } from "../repos/AccountRepo"
-import { MarkdownAccountRepo } from "../repos/markdown/MarkdownAccountRepo"
+import { validateAccount } from "../lib/accountUtil.js"
+import { filterInvalid } from "../lib/validationUtil.js"
+import { Account } from "../models/Account.js"
+import { ValidationError } from "../models/ValidationError.js"
+import { AccountRepo } from "../repos/AccountRepo.js"
+import { MarkdownAccountRepo } from "../repos/markdown/MarkdownAccountRepo.js"
 
 export const getValidAccounts = async (rootDir: string): Promise<Account[]> => {
   const accountRepo: AccountRepo = new MarkdownAccountRepo(rootDir)

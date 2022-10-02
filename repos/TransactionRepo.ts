@@ -1,5 +1,5 @@
-import { Account } from "../models/Account"
-import { Transaction } from "../models/Transaction"
+import { Account } from "../models/Account.js"
+import { Transaction } from "../models/Transaction.js"
 
 export interface TransactionRepo {
   getAll(): Promise<Transaction[]>

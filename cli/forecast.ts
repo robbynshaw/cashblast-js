@@ -1,13 +1,12 @@
 import moment from "moment"
-import { start } from "repl"
-import { CashBlast } from "../CashBlast"
-import { ForecastResult } from "../models/ForecastResult"
-import { AccountRepo } from "../repos/AccountRepo"
-import { BillRepo } from "../repos/BillRepo"
-import { MarkdownAccountRepo } from "../repos/markdown/MarkdownAccountRepo"
-import { MarkdownBillRepo } from "../repos/markdown/MarkdownBillRepo"
-import { MarkdownTransactionRepo } from "../repos/markdown/MarkdownTransactionRepo"
-import { TransactionRepo } from "../repos/TransactionRepo"
+import { CashBlast } from "../CashBlast.js"
+import { ForecastResult } from "../models/ForecastResult.js"
+import { AccountRepo } from "../repos/AccountRepo.js"
+import { BillRepo } from "../repos/BillRepo.js"
+import { MarkdownAccountRepo } from "../repos/markdown/MarkdownAccountRepo.js"
+import { MarkdownBillRepo } from "../repos/markdown/MarkdownBillRepo.js"
+import { MarkdownTransactionRepo } from "../repos/markdown/MarkdownTransactionRepo.js"
+import { TransactionRepo } from "../repos/TransactionRepo.js"
 
 export const printForecasts = async (
   rootDir: string,

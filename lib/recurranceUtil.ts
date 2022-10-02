@@ -1,5 +1,7 @@
-import { ValidationError } from "../models/ValidationError"
-import { RRule } from "rrule"
+import { ValidationError } from "../models/ValidationError.js"
+import pkg from "rrule"
+
+const { RRule } = pkg
 
 export const validateRecurrance = (
   recurrance: string
@@ -7,7 +9,7 @@ export const validateRecurrance = (
   return null // TODO
 }
 
-export const parseRecurrance = (recurrance: string): RRule => {
-  const recur: RRule = RRule.fromText(recurrance)
+export const parseRecurrance = (recurrance: string): pkg.RRule => {
+  const recur: pkg.RRule = RRule.fromText(recurrance)
   return recur
 }

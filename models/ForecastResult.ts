@@ -1,5 +1,5 @@
-import { Account } from "./Account"
-import { Forecast } from "./Forecast"
+import { Account } from "./Account.js"
+import { Forecast } from "./Forecast.js"
 
 export interface ForecastResult {
   account: Account
