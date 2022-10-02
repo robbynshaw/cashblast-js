@@ -35,4 +35,17 @@ export class MarkdownTransactionRepo implements TransactionRepo {
       accountId: convertToAbsolutePath(trans.id, trans.accountId) || "",
     }
   }
+
+  public static resolveAccounts(
+    transactions: Transaction[],
+    accounts: Account[]
+  ): Transaction[] {
+    const accountsById: Map<string, Account> = new Map<string, Account>()
+    accounts.map((account) => accountsById.set(account.id, account))
+
+    return transactions.map((t) => ({
+      ...t,
+      account: t.accountId ? accountsById.get(t.accountId) : undefined,
+    }))
+  }
 }

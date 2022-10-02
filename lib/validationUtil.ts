@@ -1,5 +1,10 @@
 import { ValidationError } from "../models/ValidationError.js"
 
+export const requiredError = (name: string): ValidationError => ({
+  field: name,
+  error: `'${name}' is a required field`,
+})
+
 export function filterInvalid<T>(
   models: T[],
   validator: (model: T) => ValidationError[],

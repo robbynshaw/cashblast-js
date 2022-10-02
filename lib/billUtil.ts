@@ -6,11 +6,7 @@ import { Transaction } from "../models/Transaction.js"
 import { ValidationError } from "../models/ValidationError.js"
 import { parseRecurrance, validateRecurrance } from "./recurranceUtil.js"
 import { v4 } from "uuid"
-
-const requiredError = (name: string): ValidationError => ({
-  field: name,
-  error: `'${name}' is a required field`,
-})
+import { requiredError } from "./validationUtil.js"
 
 export const validateBill = (bill: Bill): ValidationError[] => {
   const results: ValidationError[] = []

@@ -34,17 +34,23 @@ export function convertToAbsolutePath(
 }
 
 export const createMarkdownTable = (transactions: BalancedTransaction[]) => {
-  const table: string = markdownTable([
-    ["DATE", "NAME", "VALUE", "BALANCE"],
-    ...transactions.map((t) => {
-      const { balance, transaction } = t
-      const { date, name, value } = transaction
-      return [
-        moment(date).toString(),
-        name,
-        value.toFixed(2),
-        balance.toFixed(2),
-      ]
-    }),
-  ])
+  const table: string = markdownTable(
+    [
+      ["DATE", "NAME", "VALUE", "BALANCE"],
+      ...transactions.map((t) => {
+        const { balance, transaction } = t
+        const { date, name, value } = transaction
+        return [
+          moment(date).format("lll"),
+          name,
+          value.toFixed(2),
+          balance.toFixed(2),
+        ]
+      }),
+    ],
+    {
+      align: ["r", "l", "r", "r"],
+    }
+  )
+  return table
 }

@@ -18,7 +18,7 @@ const balanceTransactions = (
   transactions: Transaction[]
 ): BalancedTransaction[] => {
   if (!transactions || !transactions.length) {
-    throw new Error("transactions must not be empty")
+    return []
   }
 
   let balance: number = 0
@@ -34,7 +34,7 @@ const balanceTransactions = (
 
 const getLowestBalance = (transactions: BalancedTransaction[]): Balance => {
   if (!transactions || !transactions.length) {
-    throw new Error("transactions must not be empty")
+    return { amount: 0, date: new Date() }
   }
 
   let result = transactions[0]
@@ -53,6 +53,10 @@ const getYearlyBalances = (transactions: BalancedTransaction[]): Balance[] => {
   const results: Balance[] = []
   const sortedTransactions: BalancedTransaction[] =
     transactions.sort(dateSortBalancedAsc)
+  if (!sortedTransactions.length) {
+    return []
+  }
+
   let lastTrans: BalancedTransaction = sortedTransactions[0]
   let lastYear: number = lastTrans.transaction.date.getFullYear()
 
