@@ -2,7 +2,11 @@ import { existsSync } from "fs"
 import { mkdir, writeFile } from "fs/promises"
 import moment from "moment"
 import path from "path"
-import { createMarkdownTable } from "../lib/markdownUtil.js"
+import {
+  createMarkdownReport,
+  createMarkdownReportSimple,
+  createMarkdownTable,
+} from "../lib/markdownUtil.js"
 import { ForecastResult } from "../models/ForecastResult.js"
 
 export const printForecasts = async (forecasts: ForecastResult[]) => {
@@ -48,22 +52,18 @@ export const printForecastsMdReports = async (
     await mkdir(reportsDir)
   }
 
-  forecasts.map(async (fcresult) => {
-    const { account, forecast } = fcresult
+  forecasts.map(async (fcResult) => {
+    const { account } = fcResult
     const { name } = account
-    const { lowestBalance, transactions } = forecast
-
-    const report = `# FORECAST: ${name}
-
-- **Lowest Balance**: $${lowestBalance.amount.toFixed(2)} @ ${moment(
-      lowestBalance.date
-    ).format("lll")}
-
-## Transactions
-
-${createMarkdownTable(transactions)}
-`
+    const report = createMarkdownReport(fcResult)
     const reportPath: string = path.join(reportsDir, `${name} Forecast.md`)
     await writeFile(reportPath, report)
+
+    const simple = createMarkdownReportSimple(fcResult)
+    const simpleReportPath: string = path.join(
+      reportsDir,
+      `${name} Forecast (For Graph).md`
+    )
+    await writeFile(simpleReportPath, simple)
   })
 }

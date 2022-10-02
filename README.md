@@ -7,6 +7,9 @@
 - The data is stored in markdown files as yaml frontmatter
 - Setup your accounts, bills, and initial transactions.
   - See the `examples/markdown` folder for a basic setup
+    - The "write-reports" command will create a full forecast table on a page and a simpler table
+      - The simpler table can be made into a graph overview using the [Obsidian Charts plugin](https://charts.phibr0.de/Chart%20from%20Table)
+        - See example at `examples/markdown/accounts/chase_checking.md`
 
 ## Usage
 
