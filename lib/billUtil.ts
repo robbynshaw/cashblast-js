@@ -91,9 +91,10 @@ export const createTransactions = (
     date: firstBill,
     isVerified: false,
   }
+
   if (bill.recurrance) {
     const recurrance: RRule = parseRecurrance(bill.recurrance)
-    recurrance.options.dtstart = firstBill
+    recurrance.options.dtstart = new Date(firstBill)
     const dates: Date[] = recurrance.between(
       new Date(start),
       new Date(end),

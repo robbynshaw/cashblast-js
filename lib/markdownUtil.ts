@@ -37,12 +37,23 @@ export function convertToAbsolutePath(
 export const createMarkdownReport = (fcResult: ForecastResult) => {
   const { account, forecast } = fcResult
   const { name } = account
-  const { lowestBalance, transactions } = forecast
+  const { lowestBalance, yearlyBalances, transactions } = forecast
+
+  const years: string = yearlyBalances
+    .map((yb) => {
+      const { amount, date } = yb
+      return `- **${moment(date).format("lll")}**: $${amount.toFixed(2)}`
+    })
+    .join("\n")
+
   return `# FORECAST: ${name}
 
-- **Lowest Balance**: $${lowestBalance.amount.toFixed(2)} @ ${moment(
+## Balances
+
+- **Lowest**: $${lowestBalance.amount.toFixed(2)} @ ${moment(
     lowestBalance.date
   ).format("lll")}
+${years}
 
 ## Transactions
 

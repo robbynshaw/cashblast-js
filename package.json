@@ -31,7 +31,8 @@
   },
   "scripts": {
     "start": "ts-node --esm ./index.ts",
-    "format": "prettier --write **/*.ts"
+    "format": "prettier --write **/*.ts",
+    "test": "ts-node --esm ./tests/recurrance.test.ts"
   },
   "prettier": {
     "semi": false
