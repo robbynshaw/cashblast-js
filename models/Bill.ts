@@ -6,6 +6,7 @@ export interface Bill extends HasID {
   value: number
   recurrance?: string
   first: Date
+  last?: Date
 
   creditAccountId?: string
   creditAccount?: Account

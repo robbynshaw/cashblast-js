@@ -77,6 +77,7 @@ export const createTransactions = (
 ): Transaction[] => {
   const results: Transaction[] = []
   let firstBill: Date = bill.first
+  const lastBill: Date = bill.last || new Date(end)
   let isDebit: boolean = true
   if (account.id === bill.creditAccountId) {
     isDebit = false
@@ -95,11 +96,7 @@ export const createTransactions = (
   if (bill.recurrance) {
     const recurrance: RRule = parseRecurrance(bill.recurrance)
     recurrance.options.dtstart = new Date(firstBill)
-    const dates: Date[] = recurrance.between(
-      new Date(start),
-      new Date(end),
-      true
-    )
+    const dates: Date[] = recurrance.between(new Date(start), lastBill, true)
 
     dates.map((dt) => {
       results.push({ ...baseTrans, date: dt })
