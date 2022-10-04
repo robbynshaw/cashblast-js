@@ -1,5 +1,6 @@
 import { createReadStream } from "fs"
-import { readdir } from "fs/promises"
+import { readdir, writeFile } from "fs/promises"
+import { dump } from "js-yaml"
 import { resolve } from "path"
 import { createInterface } from "readline"
 
@@ -74,6 +75,16 @@ export const readYamlFrontMatter = async (path: string): Promise<string> => {
   }
 
   return results.join("\n")
+}
+
+export const writeAsYamlFrontMatter = async (
+  obj: any,
+  path: string
+): Promise<void> => {
+  const result: string = `---
+${dump(obj)}
+---`
+  await writeFile(path, result)
 }
 
 const getFilesRecursive = async (dir: string): Promise<string[]> => {

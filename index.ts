@@ -17,6 +17,10 @@ import { validateAccounts } from "./cli/accounts.js"
 import { validateBills } from "./cli/bills.js"
 import { Account } from "./models/Account.js"
 import { validateTransactions } from "./cli/transactions.js"
+import { BalancedTransaction } from "./models/BalancedTransaction.js"
+import { parseTransactions } from "./lib/ofxUtil.js"
+import { existsSync } from "fs"
+import { mkdir } from "fs/promises"
 
 const run = async () => {
   console.log("💰💥💥 CashBlast 💰💥💥")
@@ -116,6 +120,63 @@ const run = async () => {
         )
 
         await printForecasts(forecasts)
+      }
+    )
+    .command(
+      "import-transactions",
+      "parse transactions from file and save to database",
+      (rgs) => {
+        rgs
+          .options({
+            file: { type: "string" },
+            accountId: { type: "string" },
+            rootDir: { type: "string", default: "./examples/markdown" },
+            subDir: { type: "string", default: "transactions" },
+          })
+          .alias("f", "file")
+          .alias("r", "rootDir")
+          .alias("a", "accountId")
+          .alias("s", "subDir")
+          .demandOption(["file", "accountId"])
+      },
+      async (importArgs: any) => {
+        const rootDir: string = path.resolve(importArgs.rootDir)
+        console.log("Root Dir:", rootDir)
+        const subDir: string = path.resolve(
+          path.join(importArgs.rootDir, importArgs.subDir)
+        )
+        console.log("Write Directory: ", subDir)
+        const importFile: string = path.resolve(importArgs.file)
+        console.log("Import FIle:", importFile)
+        const accountId: string = path.resolve(importArgs.accountId)
+        console.log("Account ID:", accountId)
+
+        const accountRepo: AccountRepo = new MarkdownAccountRepo(rootDir)
+        const transRepo: TransactionRepo = new MarkdownTransactionRepo(
+          rootDir,
+          importArgs.subDir
+        )
+
+        const account: Account = await accountRepo.getByID(accountId)
+        if (!account) {
+          console.log(`Unable to find account by id: ${accountId}`)
+          return
+        }
+
+        if (!existsSync(subDir)) {
+          console.log("Creating write directory...")
+          await mkdir(subDir, { recursive: true })
+        }
+
+        console.log("Parsing transactions...")
+        const bTrans: BalancedTransaction[] = await parseTransactions(
+          importFile,
+          account
+        )
+        console.log(`Found ${bTrans.length} transaction(s).`)
+        console.log("Importing...")
+        await transRepo.saveAll(bTrans.map((bt) => bt.transaction))
+        console.log("Import complete")
       }
     )
     .parseAsync()

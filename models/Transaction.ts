@@ -8,4 +8,6 @@ export interface Transaction extends HasID {
   account: Account
   date: Date
   isVerified: boolean
+  memo?: string
+  fitid?: string
 }

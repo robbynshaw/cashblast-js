@@ -1,3 +1,6 @@
+import { existsSync } from "fs"
+import path, { join, relative, resolve } from "path"
+import { writeAsYamlFrontMatter } from "../../lib/fileUtil.js"
 import {
   convertToAbsolutePath,
   parseYamlFilesByType,
@@ -10,16 +13,44 @@ export const TransactionTypeName = "CashBlast.Transaction"
 
 export class MarkdownTransactionRepo implements TransactionRepo {
   private readonly rootDir: string
+  private readonly importDir: string
 
-  constructor(rootDir: string) {
+  constructor(rootDir: string, importSubDir?: string) {
     this.rootDir = rootDir
+    this.importDir = importSubDir ? join(rootDir, importSubDir) : rootDir
   }
+
   async getAll(): Promise<Transaction[]> {
     let trans: Transaction[] = await parseYamlFilesByType(
       this.rootDir,
       TransactionTypeName
     )
     return trans.map(this.standardizeIds)
+  }
+
+  async saveAll(transactions: Transaction[]): Promise<void> {
+    await Promise.all(transactions.map(async (t) => await this.save(t)))
+  }
+
+  async save(transaction: Transaction): Promise<void> {
+    const { id, name, value, accountId, date, isVerified, memo, fitid } =
+      transaction
+    const path: string = resolve(join(this.importDir, `${id}.md`))
+    if (!existsSync(path)) {
+      await writeAsYamlFrontMatter(
+        {
+          data_type: TransactionTypeName,
+          name,
+          value,
+          accountId: relative(this.rootDir, accountId),
+          date,
+          isVerified,
+          memo,
+          fitid,
+        },
+        path
+      )
+    }
   }
 
   async getForAccount(account: Account): Promise<Transaction[]> {

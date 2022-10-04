@@ -18,4 +18,15 @@ export class MarkdownAccountRepo implements AccountRepo {
     )
     return accounts
   }
+
+  public async getByID(id: string): Promise<Account | null> {
+    const accounts: Account[] = await this.getAll()
+    const results: Account[] = accounts.filter(
+      (ac) => ac.id.toLowerCase() === id.toLowerCase()
+    )
+    if (results.length) {
+      return results[0]
+    }
+    return null
+  }
 }
