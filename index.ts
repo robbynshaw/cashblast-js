@@ -21,6 +21,9 @@ import { BalancedTransaction } from "./models/BalancedTransaction.js"
 import { parseTransactions } from "./lib/ofxUtil.js"
 import { existsSync } from "fs"
 import { mkdir } from "fs/promises"
+import { Transaction } from "./models/Transaction.js"
+import { createMarkdownTable } from "./lib/markdownUtil.js"
+import { dateSortAsc } from "./lib/forecastUtil.js"
 
 const run = async () => {
   console.log("💰💥💥 CashBlast 💰💥💥")
@@ -82,6 +85,43 @@ const run = async () => {
 
         // await printForecasts(forecasts)
         await printForecastsMdReports(forecasts, reportsDir)
+      }
+    )
+    .command(
+      "print-transactions",
+      "print saved transactions to the console",
+      (rgs) => {
+        rgs.options({
+          rootDir: { type: "string", default: "./examples/markdown" },
+        })
+      },
+      async (writeArgs: any) => {
+        const rootDir: string = path.resolve(writeArgs.rootDir)
+        console.log("Root Dir:", rootDir)
+
+        const accountRepo: AccountRepo = new MarkdownAccountRepo(rootDir)
+        const billRepo: BillRepo = new MarkdownBillRepo(rootDir)
+        const transRepo: TransactionRepo = new MarkdownTransactionRepo(rootDir)
+        const cb: CashBlast = new CashBlast(accountRepo, billRepo, transRepo)
+
+        const accounts: Account[] = await accountRepo.getAll()
+        await Promise.all(
+          accounts.map(async (account) => {
+            console.log(`\n# ACCOUNT: ${account.name}`)
+            const trans: Transaction[] = (
+              await transRepo.getForAccount(account)
+            ).sort(dateSortAsc)
+
+            console.log(
+              createMarkdownTable(
+                trans.map((t) => ({
+                  balance: t.importedBalance ?? 0.0,
+                  transaction: t,
+                }))
+              )
+            )
+          })
+        )
       }
     )
     .command(
@@ -152,7 +192,7 @@ const run = async () => {
         console.log("Account ID:", accountId)
 
         const accountRepo: AccountRepo = new MarkdownAccountRepo(rootDir)
-        const transRepo: TransactionRepo = new MarkdownTransactionRepo(
+        const transRepo: MarkdownTransactionRepo = new MarkdownTransactionRepo(
           rootDir,
           importArgs.subDir
         )
@@ -175,8 +215,21 @@ const run = async () => {
         )
         console.log(`Found ${bTrans.length} transaction(s).`)
         console.log("Importing...")
+
+        let count: number = 0
+        let exists: number = 0
+        transRepo.onSaved = (trans: Transaction) => {
+          count++
+          console.log(`Transaction '${trans.id}' saved`)
+        }
+        transRepo.onExists = (trans: Transaction) => {
+          exists++
+          console.log(`Transaction '${trans.id}' skipped. It already exists.`)
+        }
         await transRepo.saveAll(bTrans.map((bt) => bt.transaction))
-        console.log("Import complete")
+        console.log(
+          `Import complete. ${count} record(s) imported. ${exists} record(s) skipped.`
+        )
       }
     )
     .parseAsync()

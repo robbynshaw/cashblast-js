@@ -22,22 +22,24 @@ export const printForecasts = async (forecasts: ForecastResult[]) => {
     )
     console.log(`\tTransactions:`)
     console.log(
-      `\t${"DATE".padEnd(25)} | ${"NAME".padEnd(20)} | ${"VALUE".padEnd(
+      `\t${"DATE".padEnd(25)} | ${"NAME".padEnd(40)} | ${"VALUE".padEnd(
         11
-      )} | ${"BALANCE"}`
+      )} | ${"BALANCE".padEnd(10)} | R_BAL`
     )
     console.log(
       "\t======================================================================================"
     )
     transactions.map((t) => {
       const { balance, transaction } = t
-      const { date, name, value } = transaction
+      const { date, name, value, importedBalance } = transaction
       console.log(
         `\t${moment(date).format("lll").padStart(25)} | ${name.padEnd(
-          20
+          40
         )} | $${value.toFixed(2).padStart(10)} | $${balance
           .toFixed(2)
-          .padStart(10)}`
+          .padStart(10)} | ${
+          importedBalance && importedBalance.toFixed(2).padStart(10)
+        }`
       )
     })
   })

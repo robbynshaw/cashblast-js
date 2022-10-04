@@ -30,17 +30,18 @@ export const parseTransactions = async (
           .replace(new RegExp(" ", "g"), "_")
         bal = bal - TRNAMT
         results.push({
-          balance: parseInt(bal.toFixed(2)),
+          balance: parseFloat(bal.toFixed(2)),
           transaction: {
             id: uid,
             name: NAME,
-            value: parseInt(TRNAMT),
+            value: parseFloat(TRNAMT),
             account: account,
             accountId: account.id,
             date: parseOfxDate(DTPOSTED),
             isVerified: true,
             memo: MEMO,
             fitid: uid,
+            importedBalance: parseFloat(bal.toFixed(2)),
           },
         })
       })

@@ -10,4 +10,5 @@ export interface Transaction extends HasID {
   isVerified: boolean
   memo?: string
   fitid?: string
+  importedBalance?: number
 }
