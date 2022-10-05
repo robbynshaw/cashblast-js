@@ -19,7 +19,7 @@
     "uuid": "^9.0.0",
     "yargs": "^17.6.0"
   },
-  "name": "cashblast-js",
+  "name": "core",
   "version": "0.1.0",
   "description": "Predict future transactions from simple bills",
   "exports": "./index.js",

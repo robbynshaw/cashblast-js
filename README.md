@@ -19,12 +19,12 @@
 # install dependencies
 yarn
 # run
-yarn start print-reports
+yarn workspace core start print-reports
 # other options
-yarn start --help
-yarn start validate --rootDir "C:\myData"
-yarn start print-reports --start "5 years ago" --end "in 21 days"
-yarn start write-reports
+yarn workspace core start --help
+yarn workspace core start validate --rootDir "C:\myData"
+yarn workspace core start print-reports --start "5 years ago" --end "in 21 days"
+yarn workspace core start write-reports
 
 # example output
 💰💥💥 CashBlast 💰💥💥
